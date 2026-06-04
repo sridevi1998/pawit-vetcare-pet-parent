@@ -17,12 +17,14 @@ export type PetRecord = components["schemas"]["PetRecord"];
 export type AppointmentListResponse = JsonResponse<"/api/v1/appointments", "get", 200>;
 export type PetRecordListResponse = JsonResponse<"/api/v1/pets", "get", 200>;
 
+const runtimeConfig = window.__PAWIT_CONFIG__ ?? {};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api/v1",
+  baseURL: runtimeConfig.apiBaseUrl || import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api/v1",
   headers: {
-    "X-PawIt-Tenant-ID": import.meta.env.VITE_PAWIT_TENANT_ID,
-    "X-PawIt-User-ID": import.meta.env.VITE_PAWIT_USER_ID,
-    "X-PawIt-Role": import.meta.env.VITE_PAWIT_ROLE ?? "PetParent",
+    "X-PawIt-Tenant-ID": runtimeConfig.tenantId || import.meta.env.VITE_PAWIT_TENANT_ID,
+    "X-PawIt-User-ID": runtimeConfig.userId || import.meta.env.VITE_PAWIT_USER_ID,
+    "X-PawIt-Role": runtimeConfig.role || import.meta.env.VITE_PAWIT_ROLE || "PetParent",
   },
   withCredentials: true,
 });
